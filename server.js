@@ -9,20 +9,21 @@ app.use(express.static("public"));
 
 // Kết nối MySQL bằng biến môi trường (Railway cung cấp)
 const db = mysql.createConnection({
-  host: process.env.MYSQLHOST,
-  user: process.env.MYSQLUSER,
-  password: process.env.MYSQLPASSWORD,
-  database: process.env.MYSQLDATABASE,
-  port: process.env.MYSQLPORT
+  host: process.env.DB_HOST,
+  port: process.env.DB_PORT,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME
 });
 
 db.connect(err => {
   if (err) {
     console.error("❌ MySQL connection error:", err);
-  } else {
-    console.log("✅ Connected to MySQL");
+    return;
   }
+  console.log("✅ Connected to Railway MySQL");
 });
+
 
 // API login
 app.post("/login", (req, res) => {
