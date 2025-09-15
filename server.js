@@ -1,43 +1,46 @@
 const express = require("express");
 const mysql = require("mysql2");
-const bodyParser = require("body-parser");
+
+require("dotenv").config();
 
 const app = express();
+app.use(express.urlencoded({ extended: true }));
+app.use(express.static("public"));
 
-// đọc dữ liệu form POST
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(express.static("public")); // nơi chứa index.html, style.css
-
-// kết nối MySQL
+// Kết nối MySQL bằng biến môi trường (Railway cung cấp)
 const db = mysql.createConnection({
-  host: "localhost",
-  user: "root",     // user MySQL của bạn
-  password: "Manhtan0209@",     // mật khẩu MySQL
-  database: "libhub"
+  host: process.env.MYSQLHOST,
+  user: process.env.MYSQLUSER,
+  password: process.env.MYSQLPASSWORD,
+  database: process.env.MYSQLDATABASE,
+  port: process.env.MYSQLPORT
 });
 
 db.connect(err => {
-  if (err) throw err;
-  console.log("✅ Đã kết nối MySQL");
+  if (err) {
+    console.error("❌ MySQL connection error:", err);
+  } else {
+    console.log("✅ Connected to MySQL");
+  }
 });
 
-// xử lý form login
+// API login
 app.post("/login", (req, res) => {
   const { email, password } = req.body;
-
   const sql = "SELECT * FROM users WHERE email = ? AND password = ?";
   db.query(sql, [email, password], (err, results) => {
-    if (err) throw err;
+    if (err) return res.status(500).send("Database error");
 
     if (results.length > 0) {
-      res.send("✅ Đăng nhập thành công!");
+      res.send("Đăng nhập thành công");
     } else {
-      res.send("❌ Sai email hoặc mật khẩu!");
+      res.send("Sai email hoặc mật khẩu");
     }
   });
 });
 
-// chạy server
-app.listen(3000, () => {
-  console.log("🚀 Server chạy tại http://localhost:3000");
+// Server listen
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`🚀 Server running at http://localhost:${PORT}`);
 });

@@ -128,4 +128,64 @@ body {
     opacity: 0.9;
 }
 
+#message {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    transform: translateX(100%);
+    padding: 14px 20px;
+    border-radius: 10px;
+    font-weight: 600;
+    text-align: center;
+    z-index: 9999;
+    display: none;
+    min-width: 300px;
+    max-width: 600px;
+    background-color: #101997;
+    box-shadow: 0px 4px 12px rgba(0,0,0,0.2);
+}
+
+#message.success {
+    background-color: #B8E8FD;  /* màu nền xanh nhạt */
+    color: #101997;             /* màu chữ xanh đậm */
+    border: 1px solid #7688ec;  /* viền */
+}
+
+#message.error {
+    background-color: #fde2e2;  /* màu nền đỏ nhạt */
+    color: #842029;             /* màu chữ đỏ đậm */
+    border: 1px solid #f5a3a3;  /* viền */
+}
+
+#message.show {
+    display: block;
+    animation: slideIn 0.4s ease forwards;
+}
+
+#message.hide {
+    animation: slideOut 0.4s ease forwards;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(100%);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideOut {
+    from {
+        opacity: 1;
+        transform: translateX(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateX(100%);
+    }
+}
+
 

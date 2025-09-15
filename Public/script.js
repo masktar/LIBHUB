@@ -1,10 +1,11 @@
-document.getElementById("loginForm").addEventListener("submit", async function(e) {
-    e.preventDefault(); // chặn submit mặc định
+const msgBox = document.getElementById("message");
+
+document.getElementById("loginForm").addEventListener("submit", async function (e) {
+    e.preventDefault();
 
     const email = document.getElementById("email").value;
     const password = document.getElementById("password").value;
 
-    // Gửi dữ liệu đến server
     const res = await fetch("/login", {
         method: "POST",
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
@@ -13,13 +14,30 @@ document.getElementById("loginForm").addEventListener("submit", async function(e
 
     const text = await res.text();
 
-    const msgBox = document.getElementById("message");
-    msgBox.innerText = text;
+    // reset trạng thái
+    msgBox.style.display = "block";
+    msgBox.className = "";
+    msgBox.innerText = text.replace(/^[^a-zA-ZÀ-ỹ0-9]+/, ""); // bỏ ký tự đặc biệt đầu chuỗi
 
-    // Thêm màu cho thông báo
     if (text.includes("thành công")) {
-        msgBox.style.color = "green";
+        msgBox.classList.add("success");
     } else {
-        msgBox.style.color = "red";
+        msgBox.classList.add("error");
     }
+
+    // reset animation trước khi add class "show"
+    msgBox.classList.remove("show");
+    void msgBox.offsetWidth; // trick reset animation
+    msgBox.classList.add("show");
+
+    // Ẩn sau 5 giây
+    setTimeout(() => {
+        msgBox.classList.remove("show");
+        msgBox.classList.add("hide");
+
+        msgBox.addEventListener("animationend", () => {
+            msgBox.style.display = "none";
+            msgBox.classList.remove("hide");
+        }, { once: true });
+    }, 5000);
 });

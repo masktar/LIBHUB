@@ -1,7 +1,7 @@
 use libhub;
 
 UPDATE users
-SET password = '98765'
-where email = 'user2@example.com';
+SET password = '12'
+where email = 'test@gmail.com';
 
 SELECT * FROM users;
