@@ -6,7 +6,7 @@ document.getElementById("loginForm").addEventListener("submit", async function (
     const email = document.getElementById("email").value;
     const password = document.getElementById("password").value;
 
-    const res = await fetch("/login", {
+    const res = await fetch("https://libhub-production.up.railway.app/login", {
         method: "POST",
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
         body: `email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`
